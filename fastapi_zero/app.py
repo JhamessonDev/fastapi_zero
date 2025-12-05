@@ -1,28 +1,36 @@
 from http import HTTPStatus
 
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
 
-from fastapi_zero.schemas import Message
+from fastapi_zero.schemas import (
+    Message,
+    UserDB,
+    UserList,
+    UserPublic,
+    UserSchema,
+)
 
 app = FastAPI(title='Minha primeira API')
 
+database: list[UserDB] = []
 
-# # FastAPI já retorna 200 por padrão, mas podemos dizer explicitamente
+
+# FastAPI já retorna 200 por padrão, mas podemos dizer explicitamente
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)
 def read_root():
     return {'message': 'Olá Mundo!'}
 
 
-@app.get('/test/', response_class=HTMLResponse)
-def read_html():
-    return """
-    <html>
-        <head>
-            <title> Olá Mundo em HTML </title>
-        </head>
-        <body>
-            <h1> Olá Mundo, vindo do meu HTML! </h1>
-        </body>
-    </html>
-    """
+# Alterando o padrão para mostrar status code 201
+@app.post('/users/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
+def create_user(user: UserSchema):
+    user_with_id = UserDB(**user.model_dump(), id=len(database) + 1)
+
+    database.append(user_with_id)
+
+    return user_with_id
+
+
+@app.get('/users/', status_code=HTTPStatus.OK, response_model=UserList)
+def read_users():
+    return {'users': database}
