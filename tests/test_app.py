@@ -6,7 +6,7 @@ def test_root_deve_retornar_ola_mundo(client) -> None:
     response = client.get('/')
 
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {'message': 'Olá Mundo!'}
+    assert response.json() == {'message': 'Hello World!'}
 
 
 def test_create_user(client) -> None:

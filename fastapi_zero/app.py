@@ -10,7 +10,7 @@ from fastapi_zero.schemas import (
     UserSchema,
 )
 
-app = FastAPI(title='Minha primeira API')
+app = FastAPI(title='My first API')
 
 database: list[UserDB] = []
 
@@ -18,7 +18,7 @@ database: list[UserDB] = []
 # FastAPI já retorna 200 por padrão, mas podemos dizer explicitamente
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)
 def read_root():
-    return {'message': 'Olá Mundo!'}
+    return {'message': 'Hello World!'}
 
 
 # Alterando o padrão para mostrar status code 201
